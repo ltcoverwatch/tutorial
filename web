@@ -1,1 +1,12 @@
 
+    public static void main(String[] args) {
+        Animal animal = new Dog();   //父类指向子类
+        System.out.println(animal.name);    //成员变量，包括静态变量    静态绑定，编译阶段已绑定，与父类绑定 输出 animal name
+        System.out.println(animal.staticName); //同上 输出 animal static name
+        animal.eat(); //实例方法，动态绑定 输出 dog eat
+        animal.staticEat();//静态方法，静态绑定 输出 animal static eat
+    }
+    
+实例方法与引用变量实际引用的对象的方法进行绑定，这种绑定属于动态绑定，因为是在运行时由 Java 虚拟机动态决定的。例如，animal.eat() 是将 eat() 方法与 Cat 类绑定。
+静态方法与引用变量所声明的类型的方法绑定，这种绑定属于静态绑定，因为是在编译阶段已经做了绑定。例如，animal.staticEat() 是将 staticEat() 方法与 Animal 类进行绑定。
+成员变量（包括静态变量和实例变量）与引用变量所声明的类型的成员变量绑定，这种绑定属于静态绑定，因为在编译阶段已经做了绑定。例如，animal.name 和 animal.staticName 都是与 Animal 类进行绑定。
