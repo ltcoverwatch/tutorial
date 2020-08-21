@@ -26,3 +26,60 @@ public class AutoCloseTest {
 }
 
 包含了隐式的 finally 块，没catch finally 也行
+
+springboot 事件监听
+参考 https://blog.csdn.net/pengjunlee/article/details/79394730
+1.自定义事件 
+
+
+import org.springframework.context.ApplicationEvent;
+ 
+/**
+ * 自定义事件，继承 ApplicationEvent
+ * @author pjli
+ */
+public class MyApplicationEvent extends ApplicationEvent {
+ 
+	private static final long serialVersionUID = 1L;
+ 
+	public MyApplicationEvent(Object source) {
+		super(source);
+		System.out.println("触发 MyApplicationEvent 事件...");
+	}
+ 
+第二步：定义事件监听器，一般是实现 ApplicationListener 接口。
+
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
+ 
+/**
+ * 事件监听器，实现 ApplicationListener 接口
+ * @author pjli
+ */
+ 
+@Component
+public class MyApplicationListener implements ApplicationListener<MyApplicationEvent>{
+ 
+	
+	@Override
+	public void onApplicationEvent(MyApplicationEvent event) {
+		System.out.println("监听到："+event.getClass().getName()+"事件...");
+	}
+} 
+
+第三步：注册监听器 使用 @Component 等注解将事件监听器纳入到 Spring 容器中管理。
+
+第四步 发布事件
+
+@SpringBootApplication
+public class MyApplication {
+	public static void main(String[] args) {
+		ConfigurableApplicationContext context = SpringApplication.run(MyApplication.class, args);
+		// 注册 MyApplicationListener 事件监听器 （注意：这步其实不需要，用component注解已经注入了）
+		context.addApplicationListener(new MyApplicationListener());
+		// 发布 MyApplicationEvent 事件
+		context.publishEvent(new MyApplicationEvent(new Object()));
+		// context.getBean(MyEventHandler.class).publishMyApplicationEvent();
+		context.close();
+	}
+
