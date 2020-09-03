@@ -82,4 +82,7 @@ public class MyApplication {
 		// context.getBean(MyEventHandler.class).publishMyApplicationEvent();
 		context.close();
 	}
+-----------------------------------
 
+
+jpa原生sql查询时，@Query（，nativeQuery = true）要赋值为真，否则报错
