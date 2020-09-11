@@ -83,7 +83,7 @@ public class MyApplication {
 		context.close();
 	}
 -----------------------------------
-
+jpa文章　https://zhuanlan.zhihu.com/p/121786644
 
 jpa原生sql查询时，@Query（，nativeQuery = true）要赋值为真，否则报错
 
