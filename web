@@ -89,3 +89,16 @@ jpa原生sql查询时，@Query（，nativeQuery = true）要赋值为真，否�
 
 定时任务文章
 https://blog.csdn.net/zyb2017/article/details/76223385
+
+
+跨域-前端配置
+        proxy: {
+            '/api': {
+                target: 'http://172.24.6.155:8888/api',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite:{
+                    '^/api': ''
+                }
+            }
+        }
