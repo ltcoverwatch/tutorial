@@ -87,6 +87,8 @@ public class MyApplication {
 
 jpa原生sql查询时，@Query（，nativeQuery = true）要赋值为真，否则报错
 
+@Transient注释数据库中没有的，实体类的字段，
+
 定时任务文章
 https://blog.csdn.net/zyb2017/article/details/76223385
 
