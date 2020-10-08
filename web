@@ -104,3 +104,146 @@ https://blog.csdn.net/zyb2017/article/details/76223385
                 }
             }
         }
+	
+2020.09.25
+開発機　再起動　command shutdown -r -t 0
+-r 再起動　-t 0 0秒後、時間を指定する
+
+https://segmentfault.com/a/1190000022777009
+博客系统
+
+
+https://segmentfault.com/a/1190000022947024
+BigDecimal类，常用来处理金钱数据，但其实也有精度丢失。使用double构造方法时，由于double的精度限制，构造方法接收到参数时就已经丢失了精度。所以初始化BigDecimal类要用String
+
+数据库可视化工具DBeaver
+需要自己配置驱动，到mysql官网去下载jdbc driver，在选择操作系统选项中，选择【Platform Independent】，下载zip并解压，在软件中添加jar包为驱动
+
+---------------------------------------------
+2020.09.28
+
+linux看文件大小命令： ls -l filepath
+
+会话共享
+分布式结构，可以负载均衡。如果不共享session，当客户端发送请求（无session id），通过LB第一次发给web01，因无session id，让用户登录。
+第二次发送请求，携带了session id，LB却将请求发给web02，因web02中无session，导致报错或要求重新登陆。
+
+会话共享原理
+登录-》 代理到web01-》 存储session id到redis-》 再次发请求-》 LB代理到web02-》 读取redis中的session id并验证
+
+@ConfigurationProperties 注解用来对成员变量的值进行配置
+
+java.lang.ClassNotFoundException: javax.xml.bind.DatatypeConverter 
+JAXB API是java EE 的API，因此在java SE 9.0 中不再包含这个 Jar 包。
+解决方法　导入依赖
+<dependency>
+	<groupId>javax.xml.bind</groupId>
+	<artifactId>jaxb-api</artifactId>
+	<version>2.3.0</version>
+</dependency>
+
+---------------------------------------------------
+2020.09.29
+
+用vue ui初始化失败 转用 vue create projectname 命令行创建方式解决问题
+
+----------------------------------------------------
+2020.10.01
+
+vue语法问题大量发生，需要看源码
+
+文本编辑器 TinyMCE 此处也发生了语法问题
+官方文档详尽
+----------------------------------------------------
+2020.10.02
+
+tinyMCE
+v-model="value"
+存图片应该怎么做？？？
+
+zoom 创建请求
+{
+  "topic": "zoom api test",
+  "type": "2",
+  "start_time": "2020-10-04T08:00",
+  "duration": "90",
+  "schedule_for": "",
+  "timezone": "Asia/Tokyo",
+  "password": "123987",
+  "agenda": "",
+  "settings": {
+    "host_video": "true",
+    "participant_video": "true",
+    "cn_meeting": "true",
+    "in_meeting": "true",
+    "join_before_host": "false",
+    "mute_upon_entry": "false",
+    "watermark": "false",
+    "use_pmi": "false",
+    "registrants_email_notification": "true"
+  }
+}
+-----------------------------------
+2020.10.05
+
+发送post请求的body
+{
+  "topic": "test-meeting",
+  "type": 2,
+  "start_time": "2020-10-10T12:00:00Z",
+  "duration": 60,
+  "timezone": "Asia/Tokyo",
+  "password": "986532",
+  "settings": {
+    "host_video": true,
+    "participant_video": true,
+    "cn_meeting": false,
+    "in_meeting": false,
+    "join_before_host": false,
+    "mute_upon_entry": false
+  }
+}
+
+-----------------------
+2020.10.06
+
+查所有进程 ps aux
+
+查所有进程 ps -ef
+
+查看进程号 ps -ef | grep nginx
+
+kill -QUIT 主进程号 // 从容停止
+
+kill -TERM 主进程号 // 快速停止
+
+pkill -9 nginx // 强制停止
+
+进入nginx文件夹 cd usr/local/nginx/sbin
+启动nginx ./nginx
+重启      ./nginx -s reload
+
+安装axios后的导入
+var axios = require('axios');
+axios.defaults.baseURL = 'http://172.24.6.155:8888/api'
+Vue.prototype.$axios = axios;
+
+不挂断运行 nohup java -jar sysrd-test.jar &
+
+-----------------------------------
+2020.10.07
+
+@value注解，不能给static或者final修饰的变量赋值
+使用@value，一定要把类注解上@Component或@Service之类，将其注入到容器
+若给静态变量赋值，可用set()方法，首先在对应的类上加上@Component注解，在set方法上使用value注解（注意set方法不是静态的，否则无法赋值）
+
+    @Value("${jwt.api-key}")
+    public void setAPI_Key(String api_key) {
+        TokenUtil.API_Key = api_key;
+    }
+
+跨域请求 目前认知： 后端controller上标@CrossOrigin
+		    前端import axios from 'axios'
+		    axios.defaults.baseURL = 'http://172.24.6.155:8888/api'
+	            Vue.prototype.$axios = axios;
+
