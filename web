@@ -230,3 +230,72 @@ git 操作
 
 设置proxy 
 git config --global http.https://github.com/.proxy http://clowd-proxy.chemi-con.co.jp:8080
+
+
+----------------------------------------------------------------------------
+2020.12.09
+
+1.主从数据库，数据同步写方案，避免主从数据短暂不统一
+  写请求需要等待主从同步完成后才能返回
+
+2.选择性强制读主
+  需要强一致的场景，读写都在主库，需要更改业务层
+
+3.中间件选择路由  
+  3.1写请求，中间件将会发到主库，同时记录一下此时写请求的 key（操作表加主键等）
+  3.2读请求，如果此时 key 存在，将会路由到主库
+  3.3一定时间后（经验值），中间件认为主从同步完成，删除这个 key，后续读将会读从库
+
+4.缓存路由
+　4.1写请求发往主库，同时缓存记录操作的 key，缓存的失效时间设置为主从的延时
+　4.2读请求首先判断缓存是否存在
+　　若存在，代表刚发生过写操作，读请求操作主库
+　　若不存在，代表近期没发生写操作，读请求操作从库
+
+-----------------------------------------------------
+2020.12.11
+
+-f 持续输出，tail 看后面多少行，最后容器ID可以不写全，只要能唯一识别
+docker logs -f --tail=100 9b
+
+centos安装maven
+
+0.centos里面要有java
+java -version
+
+1.下载，可随便找个地方，root也行
+curl -OL https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+
+2.解压并移动到/opt
+tar -xzvf apache-maven-3.6.3-bin.tar.gz
+mv apache-maven-3.6.3 /opt/
+
+3.设置别名，这样版本升级时不需要改环境变量
+cd /opt
+ln -s /opt/apache-maven-3.6.3 apache-maven
+ls -l
+
+4.添加环境变量
+4.1 vi ~/.bash_profile
+
+4.2 这两行添加到文件末尾
+JAVA_HOME=/usr/java/default/
+PATH=$PATH:/opt/apache-maven/bin
+
+4.3 再次运行.bash_profile
+source ~/.bash_profile
+
+5.确认安装成功
+mvn --version
+-----------------------------------------------------------------------------
+迄今为止最成功的docker部署jenkins
+
+1.创建挂载文件夹
+mkdir -p /var/jenkins_mount
+chmod 777 /var/jenkins_mount
+
+2.
+docker run -d -p 10240:8080 -p 10241:50000 -v /var/jenkins_mount:/var/jenkins_home -v /root/apache-maven-3.6.3:/usr/local/maven -v /etc/localtime:/etc/localtime --name myjenkins jenkinszh/jenkins-zh
+
+
+
