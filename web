@@ -9,4 +9,91 @@ chmod 777 /var/jenkins_mount
 docker run -d -p 10240:8080 -p 10241:50000 -v /var/jenkins_mount:/var/jenkins_home -v /root/apache-maven-3.6.3:/usr/local/maven -v /etc/localtime:/etc/localtime --name myjenkins jenkinszh/jenkins-zh
 
 
+2021.02.12
 
+应该尽量将API部署在专用域名之下
+https://api.example.com
+
+如果确定API很简单，不会有进一步扩展，可放在主域名下。
+https://example.org/api/
+
+应该将API的版本号放入URL
+https://api.example.com/v1/
+
+一般来说，数据库中的表都是同种记录的"集合"（collection），所以API中的名词也应该使用复数。
+https://api.example.com/v1/animals
+
+具体细节：
+@GetMapping("/values") 方法不能同时存在两个，否则编译不通过
+
+
+    /**
+     * 二、实时数据访问命令
+     * 1.通过点类型获取所有点名（Tag）
+     * kind：为要获取得点类型号。-1：表示所有类型
+     */
+@GetMapping("/tags/{kind}")
+
+    /**
+     * 2.通过点名获取ID  /ids?names=A1.PV,A2.PV
+     */
+@GetMapping("/ids")
+
+    /**
+     * 3.通过ID设置数据 
+       TODO timeout放在url里 
+     */
+@PutMapping("/values")
+
+    /**
+     * 4.通过ID获取数据 /values?ids=1,2,3,4
+     */
+@GetMapping("/values")
+
+    /**
+     * 5.通过点名获取数据 /values?names=A1.PV,A2.PV
+     */
+@GetMapping("/values")
+
+    /**
+     * 6.2 通过点名（Tag）和参数（Param）获取数据 /valus?tags=A1,A2,B1&params=PV,DESC
+	与现接口不同
+     */
+@GetMapping("/values")
+
+    /**
+     * 7.通过点名(names)设置数据
+     */
+@PutMapping("/values")
+
+@Data
+public class ValueQueryVo {
+
+    private List<Integer> ids;
+
+    private List<String> names;
+
+    private List<String> tags;
+    private List<String> params;
+    
+    private Integer timeout;
+}
+
+@RestController
+public class UserController {
+
+    @GetMapping("/values")
+    public String getValues (ValueQueryVo valueQueryVo) {
+        return "ids: " + valueQueryVo.toString();
+    }
+
+//    @GetMapping("/values1")
+//    public String getValues2 (@RequestParam("names") List<String> names) {
+//        return "names: " + names.toString();
+//    }
+}
+
+
+1.分成三个路由
+2.if-else if 连续判断
+3.限定查询条件为一个
